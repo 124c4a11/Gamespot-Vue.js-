@@ -1,0 +1,63 @@
+<template>
+  <v-container>
+    <v-layout justify-center>
+      <v-flex xs12 xl10>
+        <v-layout justify-center wrap>
+          <v-card
+            v-for="(post, ndx) in posts"
+            :key="ndx"
+            max-width="300"
+            class="card_flex ma-1"
+          >
+            <v-img
+              :src="require(`@/assets/img/featured/${post.img}`)"
+              aspect-ratio="1.5"
+            ></v-img>
+
+            <v-spacer>
+              <v-card-title primary-title>
+                <div>
+                  <h3 class="headline mb-2">{{ post.title }}</h3>
+                  <div class="body-1">{{ post.description }}</div>
+                </div>
+              </v-card-title>
+            </v-spacer>
+
+            <v-card-actions>
+              <v-spacer/>
+              <v-btn
+                to="/"
+                tag="a"
+                dark
+                color="red"
+                class="white-text"
+              >See review</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+import posts from '@/assets/posts.js'
+
+export default {
+  data () {
+    return {
+      posts
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.card_flex {
+  display: flex;
+  flex-direction: column;
+
+  .v-image,
+  .v-card__actions { flex: 0 0 auto; }
+}
+</style>

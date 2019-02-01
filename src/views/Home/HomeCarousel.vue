@@ -60,7 +60,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss">
 .v-carousel__controls { background: none !important; }
 
 .slide-gradient {
@@ -72,6 +72,7 @@ export default {
 
 .slide-title {
   padding: 0 .5em;
+  font-weight: 700;
   font-size: 5vw;
   color: #fff;
   background-color: #000;
