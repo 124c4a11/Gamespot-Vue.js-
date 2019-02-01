@@ -1,11 +1,11 @@
 <template>
-  <v-layout column class="page">
+  <v-app>
     <app-header/>
-    <v-spacer>
+    <v-content>
       <router-view/>
-    </v-spacer>
+    </v-content>
     <app-footer/>
-  </v-layout>
+  </v-app>
 </template>
 
 <script>
@@ -22,6 +22,4 @@ export default {
 
 <style lang="scss">
 body { font: 16px 'Roboto', sans-serif; }
-
-.page { min-height: 100vh; }
 </style>
