@@ -7,5 +7,5 @@
 </template>
 
 <style>
-.page-footer { background-color: #343a40; }
+.page-footer { background-color: #000; }
 </style>

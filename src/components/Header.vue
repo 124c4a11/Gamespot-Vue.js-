@@ -28,7 +28,7 @@ export default {
 /*================================================================
   page-heder
 ================================================================*/
-.page-header {  background-color: #343a40; }
+.page-header {  background-color: #000; }
 
 .page-header__link {
   font-size: 1.25em;

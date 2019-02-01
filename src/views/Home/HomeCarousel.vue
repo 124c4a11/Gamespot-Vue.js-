@@ -8,20 +8,22 @@
       :key="ndx"
       :src="item.img"
     >
-      <v-container fill-height="true" py-5>
-        <v-layout align-end>
-          <div class="slide-content">
-            <v-btn
-              to="/"
-              tag="a"
-              depressed
-              color="red"
-              class="slide-more ma-0"
-            >See review</v-btn>
-            <h2 class="slide-title">{{ item.title }}</h2>
-          </div>
-        </v-layout>
-      </v-container>
+      <div class="slide-gradient">
+        <v-container fill-height="true" py-5>
+          <v-layout align-end>
+            <div class="slide-content">
+              <v-btn
+                to="/"
+                tag="a"
+                depressed
+                color="red"
+                class="slide-more ma-0"
+              >See review</v-btn>
+              <h2 class="slide-title">{{ item.title }}</h2>
+            </div>
+          </v-layout>
+        </v-container>
+      </div>
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -59,12 +61,17 @@ export default {
 </script>
 
 <style lang="scss" scope>
-.v-carousel__controls { background: none; }
+.v-carousel__controls { background: none !important; }
+
+.slide-gradient {
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, .5), transparent 30%) no-repeat;
+}
 
 .slide-content { margin-bottom: 20px; }
 
 .slide-title {
-  padding: .2em .5em;
+  padding: 0 .5em;
   font-size: 5vw;
   color: #fff;
   background-color: #000;
