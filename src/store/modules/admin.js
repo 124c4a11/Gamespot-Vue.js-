@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import router from '@/router'
 import fbConfig from '@/firebaseConfig'
 
 const fbAuth = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty'
@@ -17,13 +18,17 @@ export default {
   getters: {
     authFailed: (state) => state.authFailed,
 
-    authErrorMsg: (state) => state.authErrorMsg
+    authErrorMsg: (state) => state.authErrorMsg,
+
+    isAuth: (state) => !!state.token
   },
 
   mutations: {
     authUser (state, authData) {
       state.token = authData.idToken
       state.refresh = authData.refreshToken
+
+      if (authData.type === 'signin') router.push('/dashboard')
     },
 
     authFailed (state, type) {
@@ -33,6 +38,16 @@ export default {
 
     setErrorMsg (state, errorMsg) {
       state.authErrorMsg = errorMsg.split('_').join(' ')
+    },
+
+    logout (state) {
+      state.token = null
+      state.refresh = null
+
+      localStorage.removeItem('token')
+      localStorage.removeItem('refresh')
+
+      router.push('/')
     }
   },
 

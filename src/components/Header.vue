@@ -4,17 +4,17 @@
       <v-layout row align-center>
         <router-link to="/" class="logo">Gamespot</router-link>
         <v-spacer/>
-        <router-link v-if="!userIsAuth" to="/signin" class="page-header__link">
+        <router-link v-if="!isAuth" to="/signin" class="page-header__link">
           <img :src="loginIcon" alt="login">
         </router-link>
 
         <button
-          v-if="userIsAuth"
+          v-if="isAuth"
           @click="drawerIsOpen = !drawerIsOpen"
           class="page-header__link hidden-md-and-up"
         ><v-icon dark x-large>menu</v-icon></button>
 
-        <div v-if="userIsAuth" class="hidden-sm-and-down">
+        <div v-if="isAuth" class="hidden-sm-and-down">
           <router-link
             to="/dashboard"
             class="page-header__link"
@@ -23,7 +23,7 @@
             Dashboard
           </router-link>
 
-          <button @click="userIsAuth = false" class="page-header__link">
+          <button @click="logout" class="page-header__link">
             <v-icon dark>exit_to_app</v-icon>
             Logout
           </button>
@@ -32,7 +32,7 @@
     </v-container>
 
     <v-navigation-drawer
-      v-if="userIsAuth"
+      v-if="isAuth"
       v-model="drawerIsOpen"
       app
       right
@@ -48,7 +48,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile @click="userIsAuth = false">
+        <v-list-tile @click="logout">
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
           </v-list-tile-action>
@@ -62,15 +62,24 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 import loginIcon from '@/assets/img/login.png'
 
 export default {
   data () {
     return {
       loginIcon,
-      drawerIsOpen: false,
-      userIsAuth: true
+      drawerIsOpen: false
     }
+  },
+
+  computed: {
+    ...mapGetters('admin', [ 'isAuth' ])
+  },
+
+  methods: {
+    ...mapMutations('admin', [ 'logout' ])
   }
 }
 </script>
