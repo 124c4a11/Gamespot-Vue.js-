@@ -12,6 +12,7 @@ export default {
     token: null,
     refresh: null,
     authFailed: false,
+    refreshLoading: true,
     authErrorMsg: ''
   },
 
@@ -20,7 +21,9 @@ export default {
 
     authErrorMsg: (state) => state.authErrorMsg,
 
-    isAuth: (state) => !!state.token
+    isAuth: (state) => !!state.token,
+
+    refreshLoading: (state) => state.refreshLoading
   },
 
   mutations: {
@@ -48,6 +51,10 @@ export default {
       localStorage.removeItem('refresh')
 
       router.push('/')
+    },
+
+    refreshLoading (state) {
+      state.refreshLoading = false
     }
   },
 
@@ -78,7 +85,7 @@ export default {
     refreshToken ({ commit }) {
       const refreshToken = localStorage.getItem('refresh')
 
-      if (refreshToken) {
+      if (refreshToken && refreshToken !== 'undefined') {
         Vue.http.post(`https://securetoken.googleapis.com/v1/token?key=${fbApiKey}`, {
           grant_type: 'refresh_token',
           refresh_token: refreshToken
@@ -91,9 +98,13 @@ export default {
               refreshToken: authData.refresh_token
             })
 
+            commit('refreshLoading')
+
             localStorage.setItem('token', authData.idToken)
             localStorage.setItem('refresh', authData.refreshToken)
           })
+      } else {
+        commit('refreshLoading')
       }
     }
   }
