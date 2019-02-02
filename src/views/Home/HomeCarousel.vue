@@ -13,7 +13,7 @@
           <v-layout align-end>
             <div class="slide-content">
               <v-btn
-                to="/"
+                to="#"
                 tag="a"
                 depressed
                 color="red"

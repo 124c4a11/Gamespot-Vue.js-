@@ -3,8 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import VueResource from 'vue-resource'
+
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(VueResource)
+Vue.http.options.root = ''
 
 Vue.use(Vuetify)
 

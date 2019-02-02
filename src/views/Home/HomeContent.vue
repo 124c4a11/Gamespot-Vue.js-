@@ -26,7 +26,7 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn
-                to="/"
+                to="#"
                 tag="a"
                 dark
                 color="red"
