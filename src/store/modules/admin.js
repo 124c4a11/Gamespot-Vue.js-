@@ -73,6 +73,28 @@ export default {
           commit('setErrorMsg', errorMsg)
           commit('authFailed')
         })
+    },
+
+    refreshToken ({ commit }) {
+      const refreshToken = localStorage.getItem('refresh')
+
+      if (refreshToken) {
+        Vue.http.post(`https://securetoken.googleapis.com/v1/token?key=${fbApiKey}`, {
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken
+        })
+          .then((response) => response.json())
+          .then((authData) => {
+            commit('authUser', {
+              type: 'refresh',
+              idToken: authData.id_token,
+              refreshToken: authData.refresh_token
+            })
+
+            localStorage.setItem('token', authData.idToken)
+            localStorage.setItem('refresh', authData.refreshToken)
+          })
+      }
     }
   }
 }
