@@ -1,15 +1,64 @@
 <template>
-  <div class="page-header">
+  <header class="page-header">
     <v-container>
       <v-layout row align-center>
         <router-link to="/" class="logo">Gamespot</router-link>
         <v-spacer/>
-        <router-link to="/signin" class="page-header__link">
+        <router-link v-if="!userIsAuth" to="/signin" class="page-header__link">
           <img :src="loginIcon" alt="login">
         </router-link>
+
+        <button
+          v-if="userIsAuth"
+          @click="drawerIsOpen = !drawerIsOpen"
+          class="page-header__link hidden-md-and-up"
+        ><v-icon dark x-large>menu</v-icon></button>
+
+        <div v-if="userIsAuth" class="hidden-sm-and-down">
+          <router-link
+            to="/dashboard"
+            class="page-header__link"
+          >
+            <v-icon dark>subject</v-icon>
+            Dashboard
+          </router-link>
+
+          <button @click="userIsAuth = false" class="page-header__link">
+            <v-icon dark>exit_to_app</v-icon>
+            Logout
+          </button>
+        </div>
       </v-layout>
     </v-container>
-  </div>
+
+    <v-navigation-drawer
+      v-if="userIsAuth"
+      v-model="drawerIsOpen"
+      app
+      right
+      temporary
+    >
+      <v-list>
+        <v-list-tile active-class="red--text" to="/dashboard">
+          <v-list-tile-action>
+            <v-icon>subject</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="userIsAuth = false">
+          <v-list-tile-action>
+            <v-icon>exit_to_app</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+  </header>
 </template>
 
 <script>
@@ -18,7 +67,9 @@ import loginIcon from '@/assets/img/login.png'
 export default {
   data () {
     return {
-      loginIcon
+      loginIcon,
+      drawerIsOpen: false,
+      userIsAuth: true
     }
   }
 }
@@ -43,7 +94,9 @@ export default {
     opacity: 1;
   }
 
-  & + & { margin-left: 1em; }
+  &.router-link-exact-active { opacity: 1; }
+
+  & + & { margin-left: 2em; }
 
   img { display: block; }
 }
