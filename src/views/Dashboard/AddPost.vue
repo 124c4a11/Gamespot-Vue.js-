@@ -108,7 +108,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin', [ 'addPostStatus', 'loading' ]),
+    ...mapGetters('posts', [ 'addPostStatus' ]),
+
+    ...mapGetters('common', [ 'loading' ]),
 
     postStatus () {
       const status = this.addPostStatus
@@ -121,7 +123,7 @@ export default {
 
   methods: {
     addPost () {
-      this.$store.dispatch('admin/addPost', this.post)
+      this.$store.dispatch('posts/addPost', this.post)
     },
 
     clearPost () {

@@ -1,24 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import admin from './modules/admin'
+import user from './modules/user'
+import posts from './modules/posts'
+import common from './modules/common'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    admin
-  },
-
-  state: {
-
-  },
-
-  mutations: {
-
-  },
-
-  actions: {
-
+    user,
+    posts,
+    common
   }
 })

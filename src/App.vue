@@ -19,7 +19,7 @@ export default {
   },
 
   created () {
-    this.$store.dispatch('admin/refreshToken')
+    this.$store.dispatch('user/refreshToken')
   }
 }
 </script>

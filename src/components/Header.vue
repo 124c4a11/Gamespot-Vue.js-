@@ -75,11 +75,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin', [ 'isAuth' ])
+    ...mapGetters('user', [ 'isAuth' ])
   },
 
   methods: {
-    ...mapMutations('admin', [ 'logout' ])
+    ...mapMutations('user', [ 'logout' ])
   }
 }
 </script>

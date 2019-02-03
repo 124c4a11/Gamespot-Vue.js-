@@ -63,11 +63,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin', [ 'authFailed', 'authErrorMsg', 'loading' ])
+    ...mapGetters('user', [ 'authFailed', 'authErrorMsg' ]),
+
+    ...mapGetters('common', [ 'loading' ])
   },
 
   methods: {
-    ...mapActions('admin', [ 'signIn' ]),
+    ...mapActions('user', [ 'signIn' ]),
 
     onSubmit () {
       if (this.$refs.form.validate()) {
@@ -82,7 +84,7 @@ export default {
   },
 
   destroyed () {
-    this.$store.commit('admin/authFailed', 'reset')
+    this.$store.commit('user/authFailed', 'reset')
   }
 }
 </script>
