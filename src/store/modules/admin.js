@@ -13,7 +13,9 @@ export default {
     refresh: null,
     authFailed: false,
     refreshLoading: true,
-    authErrorMsg: ''
+    authErrorMsg: '',
+    addPostStatus: false,
+    loading: false
   },
 
   getters: {
@@ -23,7 +25,11 @@ export default {
 
     isAuth: (state) => !!state.token,
 
-    refreshLoading: (state) => state.refreshLoading
+    refreshLoading: (state) => state.refreshLoading,
+
+    addPostStatus: (state) => state.addPostStatus,
+
+    loading: (state) => state.loading
   },
 
   mutations: {
@@ -55,17 +61,28 @@ export default {
 
     refreshLoading (state) {
       state.refreshLoading = false
+    },
+
+    setAddPostStatus (state, status) {
+      state.addPostStatus = status
+    },
+
+    setLoading (state, isLoading) {
+      state.loading = isLoading
     }
   },
 
   actions: {
     signIn ({ commit }, user) {
+      commit('setLoading', true)
+
       Vue.http.post(`${fbAuth}/verifyPassword?key=${fbApiKey}`, {
         ...user,
         returnSecureToken: true
       })
         .then((response) => response.json())
         .then((authData) => {
+          commit('setLoading', false)
           commit('setErrorMsg', '')
           commit('authFailed', 'reset')
 
@@ -77,6 +94,7 @@ export default {
         .catch((data) => {
           const errorMsg = data.body.error.message
 
+          commit('setLoading', false)
           commit('setErrorMsg', errorMsg)
           commit('authFailed')
         })
@@ -106,6 +124,21 @@ export default {
       } else {
         commit('refreshLoading')
       }
+    },
+
+    addPost ({ commit, state }, post) {
+      commit('setLoading', true)
+
+      Vue.http.post(`posts.json?auth=${state.token}`, post)
+        .then((response) => response.json())
+        .then(() => {
+          commit('setLoading', false)
+          commit('setAddPostStatus', true)
+
+          setTimeout(() => {
+            commit('setAddPostStatus', false)
+          }, 3000)
+        })
     }
   }
 }

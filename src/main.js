@@ -2,14 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
 import VueResource from 'vue-resource'
+import fbConfig from './firebaseConfig'
 
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(VueResource)
-Vue.http.options.root = ''
+Vue.http.options.root = fbConfig.databaseURL
 
 Vue.use(Vuetify)
 

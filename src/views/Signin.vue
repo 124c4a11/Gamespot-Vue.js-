@@ -26,10 +26,12 @@
           </v-card-text>
           <v-card-actions>
             <v-btn
+              :disabled="loading"
+              :loading="loading"
               @click="onSubmit"
               block
-              dark
               color="red"
+              class="white--text"
             >Sign in</v-btn>
           </v-card-actions>
           <p v-if="authFailed" class="px-2 pb-1 text-xs-center error--text body-1">{{ authErrorMsg }}</p>
@@ -61,7 +63,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('admin', [ 'authFailed', 'authErrorMsg' ])
+    ...mapGetters('admin', [ 'authFailed', 'authErrorMsg', 'loading' ])
   },
 
   methods: {
