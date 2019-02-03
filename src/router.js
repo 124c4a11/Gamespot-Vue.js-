@@ -5,6 +5,9 @@ import store from './store'
 import Home from './views/Home'
 import Signin from './views/Signin'
 import Dashboard from './views/Dashboard'
+import DashboardGreeting from './views/Dashboard/DashboardGreeting'
+import AddPost from './views/Dashboard/AddPost'
+import ListPosts from './views/Dashboard/ListPosts'
 
 Vue.use(Router)
 
@@ -47,6 +50,11 @@ export default new Router({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
+      children: [
+        { path: '/', component: DashboardGreeting },
+        { path: 'add_post', component: AddPost },
+        { path: 'list_posts', component: ListPosts }
+      ],
       ...authGuard
     }
   ]
