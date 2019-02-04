@@ -55,7 +55,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('posts', [ 'posts' ]),
+    ...mapGetters('posts', [ 'posts', 'countPostsUploaded' ]),
 
     ...mapGetters('common', [ 'loading' ])
   },
@@ -69,9 +69,8 @@ export default {
   },
 
   created () {
-    if (!this.posts.length || this.posts.length < 4) {
-      this.getPosts({ limit: 4 })
-    }
+    if (this.countPostsUploaded) this.getPosts({ limit: this.countPostsUploaded })
+    else this.getPosts({ limit: 4 })
   }
 }
 </script>

@@ -8,6 +8,7 @@ export default {
     posts: [],
     addPostStatus: false,
     imgUploadUrl: '',
+    countPostsUploaded: 0,
     post: null
   },
 
@@ -18,7 +19,9 @@ export default {
 
     imgUploadUrl: (state) => state.imgUploadUrl,
 
-    post: (state) => state.post
+    post: (state) => state.post,
+
+    countPostsUploaded: (state) => state.countPostsUploaded
   },
 
   mutations: {
@@ -83,7 +86,7 @@ export default {
         })
     },
 
-    getPosts ({ commit }, { limit }) {
+    getPosts ({ commit, state }, { limit }) {
       commit('common/setLoading', true, { root: true })
 
       Vue.http.get(`posts.json?orderBy="$key"&limitToLast=${limit}`)
@@ -97,6 +100,8 @@ export default {
               ...response[key]
             })
           }
+
+          state.countPostsUploaded = limit
 
           commit('setPosts', posts.reverse())
           commit('common/setLoading', false, { root: true })
