@@ -4,6 +4,29 @@
       <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Add post' }}</h1>
 
       <v-form ref="form" v-model="valid" validation>
+        <v-btn
+          :disabled="loading"
+          :loading="loading"
+          @click="triggerUpload"
+          color="blue-grey"
+          class="white--text ml-0"
+        >
+          Upload image
+          <v-icon right dark>cloud_upload</v-icon>
+        </v-btn>
+
+        <input
+          ref="fileInput"
+          @change="onFileChange"
+          type="file"
+          style="display: none"
+          accept="image/*"
+        >
+
+        <div v-if="imgUploadUrl" class="mt-4 text-xs-center">
+          <img height="200" :src="imgUploadUrl" alt="">
+        </div>
+
         <v-text-field
           v-model="post.title"
           :rules="requiredRules"
@@ -82,7 +105,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 
 export default {
@@ -92,14 +115,15 @@ export default {
 
   data () {
     return {
+      ratingItems: [1, 2, 3, 4, 5],
       valid: false,
       dialog: false,
-      ratingItems: [1, 2, 3, 4, 5],
 
       post: {
         title: '',
         description: '',
         content: '',
+        img: '',
         rating: null
       },
 
@@ -108,7 +132,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('posts', [ 'addPostStatus' ]),
+    ...mapGetters('posts', [ 'addPostStatus', 'imgUploadUrl' ]),
 
     ...mapGetters('common', [ 'loading' ]),
 
@@ -122,7 +146,22 @@ export default {
   },
 
   methods: {
+    ...mapActions('posts', [ 'uploadImg' ]),
+
+    ...mapMutations('posts', [ 'clearUploadImgUrl' ]),
+
+    triggerUpload () {
+      this.$refs.fileInput.click()
+    },
+
+    onFileChange (e) {
+      const file = e.target.files[0]
+
+      this.uploadImg(file)
+    },
+
     addPost () {
+      this.post.img = this.imgUploadUrl
       this.$store.dispatch('posts/addPost', this.post)
     },
 
@@ -131,10 +170,13 @@ export default {
         title: '',
         description: '',
         content: '',
+        img: '',
         rating: null
       }
 
       this.$refs.form.reset()
+
+      this.clearUploadImgUrl()
     },
 
     dialogOnCancel () {
@@ -152,6 +194,10 @@ export default {
         else this.addPost()
       }
     }
+  },
+
+  destroyed () {
+    this.clearUploadImgUrl()
   }
 }
 </script>
