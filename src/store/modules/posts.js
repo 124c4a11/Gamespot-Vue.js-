@@ -32,7 +32,6 @@ export default {
     },
 
     setPosts (state, posts) {
-      console.log('setPosts', posts)
       state.posts = posts
     }
   },
@@ -74,6 +73,8 @@ export default {
     },
 
     getPosts ({ commit }, { limit }) {
+      commit('common/setLoading', true, { root: true })
+
       Vue.http.get(`posts.json?orderBy="$key"&limitToLast=${limit}`)
         .then((response) => response.json())
         .then((response) => {
@@ -87,6 +88,7 @@ export default {
           }
 
           commit('setPosts', posts.reverse())
+          commit('common/setLoading', false, { root: true })
         })
     }
   }

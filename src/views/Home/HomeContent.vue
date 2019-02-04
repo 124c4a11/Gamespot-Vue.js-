@@ -30,10 +30,20 @@
                 tag="a"
                 dark
                 color="red"
-                class="white-text"
               >See review</v-btn>
             </v-card-actions>
           </v-card>
+        </v-layout>
+
+        <v-layout justify-center class="pt-4">
+          <v-btn
+            :disabled="loading"
+            :loading="loading"
+            @click="loadMore"
+            large
+            color="black"
+            class="white--text"
+          >Load more</v-btn>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -41,15 +51,25 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters('posts', [ 'posts' ])
+    ...mapGetters('posts', [ 'posts' ]),
+
+    ...mapGetters('common', [ 'loading' ])
+  },
+
+  methods: {
+    ...mapActions('posts', [ 'getPosts' ]),
+
+    loadMore () {
+      this.getPosts({ limit: this.posts.length + 4 })
+    }
   },
 
   created () {
-    this.$store.dispatch('posts/getPosts', { limit: 3 })
+    this.getPosts({ limit: 4 })
   }
 }
 </script>
