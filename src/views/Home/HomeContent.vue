@@ -26,7 +26,7 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn
-                :to="`posts/${post.id}`"
+                :to="`post/${post.id}`"
                 tag="a"
                 dark
                 color="red"
@@ -69,7 +69,9 @@ export default {
   },
 
   created () {
-    if (!this.posts.length) this.getPosts({ limit: 4 })
+    if (!this.posts.length || this.posts.length < 4) {
+      this.getPosts({ limit: 4 })
+    }
   }
 }
 </script>

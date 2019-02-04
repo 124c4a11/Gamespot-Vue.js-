@@ -7,7 +7,8 @@ export default {
   state: {
     posts: [],
     addPostStatus: false,
-    imgUploadUrl: ''
+    imgUploadUrl: '',
+    post: null
   },
 
   getters: {
@@ -15,7 +16,9 @@ export default {
 
     addPostStatus: (state) => state.addPostStatus,
 
-    imgUploadUrl: (state) => state.imgUploadUrl
+    imgUploadUrl: (state) => state.imgUploadUrl,
+
+    post: (state) => state.post
   },
 
   mutations: {
@@ -33,6 +36,14 @@ export default {
 
     setPosts (state, posts) {
       state.posts = posts
+    },
+
+    setPost (state, post) {
+      state.post = post
+    },
+
+    clearPost (state) {
+      state.post = null
     }
   },
 
@@ -90,6 +101,34 @@ export default {
           commit('setPosts', posts.reverse())
           commit('common/setLoading', false, { root: true })
         })
+    },
+
+    getPostById ({ commit, state }, id) {
+      const posts = state.posts
+      let post = null
+
+      if (posts.length) {
+        post = posts.find((post) => {
+          return post.id === id
+        })
+      }
+
+      if (post) {
+        commit('setPost', post)
+      } else {
+        Vue.http.get(`posts.json?orderBy="$key"&equalTo="${id}"`)
+          .then((response) => response.json())
+          .then((response) => {
+            for (let key in response) {
+              post = {
+                id: key,
+                ...response[key]
+              }
+            }
+
+            commit('setPost', post)
+          })
+      }
     }
   }
 }

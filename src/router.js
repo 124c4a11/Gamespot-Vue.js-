@@ -8,6 +8,7 @@ import Dashboard from './views/Dashboard'
 import DashboardGreeting from './views/Dashboard/DashboardGreeting'
 import AddPost from './views/Dashboard/AddPost'
 import ListPosts from './views/Dashboard/ListPosts'
+import Post from './views/Post'
 
 Vue.use(Router)
 
@@ -56,6 +57,11 @@ export default new Router({
         { path: 'list_posts', component: ListPosts }
       ],
       ...authGuard
+    },
+    {
+      path: '/post/:id',
+      name: 'post',
+      component: Post
     }
   ]
 })
