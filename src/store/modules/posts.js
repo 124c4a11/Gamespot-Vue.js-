@@ -5,11 +5,14 @@ export default {
   namespaced: true,
 
   state: {
+    posts: [],
     addPostStatus: false,
     imgUploadUrl: ''
   },
 
   getters: {
+    posts: (state) => state.posts,
+
     addPostStatus: (state) => state.addPostStatus,
 
     imgUploadUrl: (state) => state.imgUploadUrl
@@ -26,6 +29,11 @@ export default {
 
     clearUploadImgUrl (state) {
       state.imgUploadUrl = ''
+    },
+
+    setPosts (state, posts) {
+      console.log('setPosts', posts)
+      state.posts = posts
     }
   },
 
@@ -62,6 +70,23 @@ export default {
         .then((response) => {
           commit('setUploadImgUrl', response)
           commit('common/setLoading', false, { root: true })
+        })
+    },
+
+    getPosts ({ commit }, { limit }) {
+      Vue.http.get(`posts.json?orderBy="$key"&limitToLast=${limit}`)
+        .then((response) => response.json())
+        .then((response) => {
+          const posts = []
+
+          for (let key in response) {
+            posts.push({
+              id: key,
+              ...response[key]
+            })
+          }
+
+          commit('setPosts', posts.reverse())
         })
     }
   }

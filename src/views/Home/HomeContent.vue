@@ -10,15 +10,15 @@
             class="card_flex ma-1"
           >
             <v-img
-              :src="require(`@/assets/img/featured/${post.img}`)"
-              aspect-ratio="1.5"
+              :src="post.img"
+              aspect-ratio="1.3"
             ></v-img>
 
             <v-spacer>
               <v-card-title primary-title>
                 <div>
                   <h3 class="headline mb-2">{{ post.title }}</h3>
-                  <div class="body-1">{{ post.description }}</div>
+                  <div class="body-1 grey--text text--darken-2">{{ post.description }}</div>
                 </div>
               </v-card-title>
             </v-spacer>
@@ -26,7 +26,7 @@
             <v-card-actions>
               <v-spacer/>
               <v-btn
-                to="#"
+                :to="`posts/${post.id}`"
                 tag="a"
                 dark
                 color="red"
@@ -41,13 +41,15 @@
 </template>
 
 <script>
-import posts from '@/assets/posts.js'
+import { mapGetters } from 'vuex'
 
 export default {
-  data () {
-    return {
-      posts
-    }
+  computed: {
+    ...mapGetters('posts', [ 'posts' ])
+  },
+
+  created () {
+    this.$store.dispatch('posts/getPosts', { limit: 3 })
   }
 }
 </script>
