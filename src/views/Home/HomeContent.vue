@@ -69,7 +69,7 @@ export default {
   },
 
   created () {
-    this.getPosts({ limit: 4 })
+    if (!this.posts.length) this.getPosts({ limit: 4 })
   }
 }
 </script>
