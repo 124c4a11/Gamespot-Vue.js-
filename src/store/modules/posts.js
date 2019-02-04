@@ -154,6 +154,24 @@ export default {
             commit('setPost', post)
           })
       }
+    },
+
+    deletePost ({ commit, state, rootState }, id) {
+      const token = rootState.user.token
+
+      commit('common/setLoading', true, { root: true })
+
+      Vue.http.delete(`posts/${id}.json?auth=${token}`)
+        .then(() => {
+          let newPosts = []
+
+          state.posts.forEach((post) => {
+            if (post.id !== id) newPosts.push(post)
+          })
+
+          commit('setPosts', newPosts)
+          commit('common/setLoading', false, { root: true })
+        })
     }
   }
 }

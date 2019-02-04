@@ -6,7 +6,7 @@
           <v-card
             v-for="(post, ndx) in posts"
             :key="ndx"
-            max-width="300"
+            width="300"
             class="card_flex ma-1"
           >
             <v-img
