@@ -108,6 +108,26 @@ export default {
         })
     },
 
+    getAllPosts ({ commit }) {
+      commit('common/setLoading', true, { root: true })
+
+      Vue.http.get('posts.json')
+        .then((response) => response.json())
+        .then((response) => {
+          const posts = []
+
+          for (let key in response) {
+            posts.push({
+              id: key,
+              ...response[key]
+            })
+          }
+
+          commit('setPosts', posts.reverse())
+          commit('common/setLoading', false, { root: true })
+        })
+    },
+
     getPostById ({ commit, state }, id) {
       const posts = state.posts
       let post = null

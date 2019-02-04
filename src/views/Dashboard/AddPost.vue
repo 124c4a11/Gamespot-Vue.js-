@@ -1,7 +1,7 @@
 <template>
   <v-layout justify-center>
     <v-flex xs12 md10 lg8 xl6>
-      <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Add post' }}</h1>
+      <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Add Post' }}</h1>
 
       <v-form ref="form" v-model="valid" validation>
         <v-btn
