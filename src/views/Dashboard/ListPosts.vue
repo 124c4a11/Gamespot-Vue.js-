@@ -110,6 +110,7 @@ export default {
         {
           text: 'Rating',
           align: 'left',
+          sortable: false,
           value: 'rating'
         },
         {

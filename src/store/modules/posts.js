@@ -8,6 +8,7 @@ export default {
     posts: [],
     addPostStatus: false,
     imgUploadUrl: '',
+    posterUploadUrl: '',
     countPostsUploaded: 0,
     post: null
   },
@@ -18,6 +19,8 @@ export default {
     addPostStatus: (state) => state.addPostStatus,
 
     imgUploadUrl: (state) => state.imgUploadUrl,
+
+    posterUploadUrl: (state) => state.posterUploadUrl,
 
     post: (state) => state.post,
 
@@ -33,8 +36,16 @@ export default {
       state.imgUploadUrl = imgData.secure_url
     },
 
+    setUploadPosterUrl (state, imgData) {
+      state.posterUploadUrl = imgData.secure_url
+    },
+
     clearUploadImgUrl (state) {
       state.imgUploadUrl = ''
+    },
+
+    clearUploadPosterUrl (state) {
+      state.posterUploadUrl = ''
     },
 
     setPosts (state, posts) {
@@ -62,11 +73,11 @@ export default {
 
           setTimeout(() => {
             commit('setAddPostStatus', false)
-          }, 3000)
+          }, 2000)
         })
     },
 
-    uploadImg ({ commit }, file) {
+    uploadImg ({ commit }, { file, type }) {
       commit('common/setLoading', true, { root: true })
 
       let formData = new FormData()
@@ -81,7 +92,12 @@ export default {
       })
         .then((response) => response.json())
         .then((response) => {
-          commit('setUploadImgUrl', response)
+          if (type === 'poster') {
+            commit('setUploadPosterUrl', response)
+          } else {
+            commit('setUploadImgUrl', response)
+          }
+
           commit('common/setLoading', false, { root: true })
         })
     },
@@ -163,11 +179,7 @@ export default {
 
       Vue.http.delete(`posts/${id}.json?auth=${token}`)
         .then(() => {
-          let newPosts = []
-
-          state.posts.forEach((post) => {
-            if (post.id !== id) newPosts.push(post)
-          })
+          let newPosts = state.posts.filter((post) => post.id !== id)
 
           commit('setPosts', newPosts)
           commit('common/setLoading', false, { root: true })

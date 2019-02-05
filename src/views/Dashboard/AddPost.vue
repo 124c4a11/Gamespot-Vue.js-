@@ -4,27 +4,49 @@
       <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Add Post' }}</h1>
 
       <v-form ref="form" v-model="valid" validation>
+        <!-- image upload -->
         <v-btn
           :disabled="loading"
           :loading="loading"
-          @click="triggerUpload"
+          @click="triggerImgUpload"
           color="blue-grey"
           class="white--text ml-0"
         >
-          Upload image
+          Upload thumbnail
           <v-icon right dark>cloud_upload</v-icon>
         </v-btn>
 
         <input
-          ref="fileInput"
-          @change="onFileChange"
+          ref="imgFileInput"
+          @change="onImgFileChange"
           type="file"
           style="display: none"
           accept="image/*"
         >
 
-        <div v-if="imgUploadUrl" class="mt-4 text-xs-center">
-          <img height="200" :src="imgUploadUrl" alt="">
+        <!-- poster upload -->
+        <v-btn
+          :disabled="loading"
+          :loading="loading"
+          @click="triggerPosterUpload"
+          color="blue-grey"
+          class="white--text ml-0"
+        >
+          Upload poster
+          <v-icon right dark>cloud_upload</v-icon>
+        </v-btn>
+
+        <input
+          ref="posterFileInput"
+          @change="onPosterFileChange"
+          type="file"
+          style="display: none"
+          accept="image/*"
+        >
+
+        <div class = "text-xs-center">
+          <img v-if="imgUploadUrl" :src="imgUploadUrl" height="200" class="mt-4 mr-2" alt="">
+          <img v-if="posterUploadUrl" :src="posterUploadUrl" height="200" class="mt-4" alt="">
         </div>
 
         <v-text-field
@@ -124,6 +146,7 @@ export default {
         description: '',
         content: '',
         img: '',
+        poster: '',
         rating: null
       },
 
@@ -132,7 +155,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('posts', [ 'addPostStatus', 'imgUploadUrl' ]),
+    ...mapGetters('posts', [ 'addPostStatus', 'imgUploadUrl', 'posterUploadUrl' ]),
 
     ...mapGetters('common', [ 'loading' ]),
 
@@ -148,20 +171,31 @@ export default {
   methods: {
     ...mapActions('posts', [ 'uploadImg' ]),
 
-    ...mapMutations('posts', [ 'clearUploadImgUrl' ]),
+    ...mapMutations('posts', [ 'clearUploadImgUrl', 'clearUploadPosterUrl' ]),
 
-    triggerUpload () {
-      this.$refs.fileInput.click()
+    triggerImgUpload () {
+      this.$refs.imgFileInput.click()
     },
 
-    onFileChange (e) {
+    triggerPosterUpload () {
+      this.$refs.posterFileInput.click()
+    },
+
+    onImgFileChange (e) {
       const file = e.target.files[0]
 
-      this.uploadImg(file)
+      this.uploadImg({ file, type: 'img' })
+    },
+
+    onPosterFileChange (e) {
+      const file = e.target.files[0]
+
+      this.uploadImg({ file, type: 'poster' })
     },
 
     addPost () {
       this.post.img = this.imgUploadUrl
+      this.post.poster = this.posterUploadUrl
       this.$store.dispatch('posts/addPost', this.post)
     },
 
@@ -171,12 +205,14 @@ export default {
         description: '',
         content: '',
         img: '',
+        poster: '',
         rating: null
       }
 
       this.$refs.form.reset()
 
       this.clearUploadImgUrl()
+      this.clearUploadPosterUrl()
     },
 
     dialogOnCancel () {
@@ -198,6 +234,7 @@ export default {
 
   destroyed () {
     this.clearUploadImgUrl()
+    this.clearUploadPosterUrl()
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <v-layout v-if="post" justify-center>
       <v-flex xs12 md11 xl8>
         <h1 class="mb-3 grey--text text--darken-3">{{ post.title }}</h1>
-        <v-img aspect-ratio="2" :src="post.img" width="100%" :alt="post.title" />
+        <v-img aspect-ratio="2" :src="post.poster || post.img" width="100%" :alt="post.title" />
         <div v-html="post.content" class="post-content mt-4 grey--text text--darken-2"></div>
         <div class="post-rating mt-4">Rating: <span>{{post.rating}} / 5</span></div>
       </v-flex>
