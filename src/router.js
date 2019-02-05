@@ -7,6 +7,7 @@ import Signin from './views/Signin'
 import Dashboard from './views/Dashboard'
 import DashboardGreeting from './views/Dashboard/DashboardGreeting'
 import AddPost from './views/Dashboard/AddPost'
+import EditPost from './views/Dashboard/EditPost'
 import ListPosts from './views/Dashboard/ListPosts'
 import Post from './views/Post'
 
@@ -54,6 +55,7 @@ export default new Router({
       children: [
         { path: '/', component: DashboardGreeting },
         { path: 'add_post', component: AddPost },
+        { path: 'edit_post/:id', component: EditPost },
         { path: 'list_posts', component: ListPosts }
       ],
       ...authGuard

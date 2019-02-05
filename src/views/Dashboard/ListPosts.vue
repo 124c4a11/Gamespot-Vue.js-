@@ -25,6 +25,7 @@
             <td class="text-xs-center">{{ props.item.rating }}</td>
             <td class="text-xs-center">
               <v-btn
+                :to="`edit_post/${props.item.id}`"
                 :disabled="loading"
                 :loading="loading"
                 small

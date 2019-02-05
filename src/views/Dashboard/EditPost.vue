@@ -1,7 +1,7 @@
 <template>
-  <v-layout justify-center>
+  <v-layout v-if="post" justify-center>
     <v-flex xs12 md10 lg8 xl6>
-      <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Add Post' }}</h1>
+      <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Edit Post' }}</h1>
 
       <v-form ref="form" v-model="valid" validation>
         <!-- image upload -->
@@ -44,10 +44,10 @@
           accept="image/*"
         >
 
-        <v-layout v-if="imgUploadUrl || posterUploadUrl" justify-center class="my-4">
-          <v-card v-if="imgUploadUrl" width="300" class="mx-1">
+        <v-layout v-if="imgUrl || posterUrl" justify-center class="my-4">
+          <v-card v-if="imgUrl" width="300" class="mx-1">
             <v-img
-              :src="imgUploadUrl"
+              :src="imgUrl"
               aspect-ratio="1.3"
             />
             <v-card-actions class="pa-2">
@@ -55,9 +55,9 @@
             </v-card-actions>
           </v-card>
 
-          <v-card v-if="posterUploadUrl" width="300" class="mx-1">
+          <v-card v-if="posterUrl" width="300" class="mx-1">
             <v-img
-              :src="posterUploadUrl"
+              :src="posterUrl"
               aspect-ratio="1.3"
             />
             <v-card-actions class="pa-2">
@@ -98,13 +98,13 @@
           @click="onSubmit"
           color="red"
           class="white--text ml-0"
-        >Add Post</v-btn>
+        >Update Post</v-btn>
 
         <v-alert
-          :value="postStatus"
+          :value="updatePostStatus"
           type="success"
           class="mt-3"
-        >Your post was posted.</v-alert>
+        >Your post was updated.</v-alert>
       </v-form>
     </v-flex>
 
@@ -141,6 +141,10 @@
       </v-card>
     </v-dialog>
   </v-layout>
+
+  <v-layout v-else justify-center align-center>
+    <h1 class="grey--text text--darken-1">Post not found!</h1>
+  </v-layout>
 </template>
 
 <script>
@@ -158,37 +162,40 @@ export default {
       valid: false,
       dialog: false,
 
-      post: {
-        title: '',
-        description: '',
-        content: '',
-        img: '',
-        poster: '',
-        rating: null
-      },
-
       requiredRules: [ (v) => !!v || 'Is required' ]
     }
   },
 
   computed: {
-    ...mapGetters('posts', [ 'addPostStatus', 'imgUploadUrl', 'posterUploadUrl' ]),
+    ...mapGetters('posts', [
+      'post',
+      'updatePostStatus',
+      'imgUploadUrl',
+      'posterUploadUrl'
+    ]),
 
     ...mapGetters('common', [ 'loading' ]),
 
-    postStatus () {
-      const status = this.addPostStatus
+    imgUrl () {
+      return this.imgUploadUrl || this.post.img
+    },
 
-      if (status) this.clearPost()
-
-      return status
+    posterUrl () {
+      return this.posterUploadUrl || this.post.poster
     }
   },
 
   methods: {
-    ...mapActions('posts', [ 'uploadImg' ]),
+    ...mapActions('posts', [
+      'uploadImg',
+      'getPostById'
+    ]),
 
-    ...mapMutations('posts', [ 'clearUploadImgUrl', 'clearUploadPosterUrl' ]),
+    ...mapMutations('posts', [
+      'clearUploadImgUrl',
+      'clearUploadPosterUrl',
+      'clearPost'
+    ]),
 
     triggerImgUpload () {
       this.$refs.imgFileInput.click()
@@ -210,26 +217,13 @@ export default {
       this.uploadImg({ file, type: 'poster' })
     },
 
-    addPost () {
-      this.post.img = this.imgUploadUrl
-      this.post.poster = this.posterUploadUrl
-      this.$store.dispatch('posts/addPost', this.post)
-    },
+    updatePost () {
+      const newPost = { ...this.post }
 
-    clearPost () {
-      this.post = {
-        title: '',
-        description: '',
-        content: '',
-        img: '',
-        poster: '',
-        rating: null
-      }
+      newPost.img = this.imgUploadUrl
+      newPost.poster = this.posterUploadUrl
 
-      this.$refs.form.reset()
-
-      this.clearUploadImgUrl()
-      this.clearUploadPosterUrl()
+      this.$store.dispatch('posts/updatePost', newPost)
     },
 
     dialogOnCancel () {
@@ -238,18 +232,28 @@ export default {
 
     dialogOnConfirm () {
       this.dialog = false
-      this.addPost()
+      this.updatePost()
     },
 
     onSubmit () {
       if (this.$refs.form.validate()) {
         if (this.post.content === '') this.dialog = true
-        else this.addPost()
+        else this.updatePost()
       }
     }
   },
 
+  created () {
+    const id = this.$route.params.id
+
+    if (id) {
+      this.postId = id
+      this.getPostById(id)
+    }
+  },
+
   destroyed () {
+    this.clearPost()
     this.clearUploadImgUrl()
     this.clearUploadPosterUrl()
   }

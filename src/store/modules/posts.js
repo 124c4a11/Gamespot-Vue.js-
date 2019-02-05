@@ -7,6 +7,7 @@ export default {
   state: {
     posts: [],
     addPostStatus: false,
+    updatePostStatus: false,
     imgUploadUrl: '',
     posterUploadUrl: '',
     countPostsUploaded: 0,
@@ -17,6 +18,8 @@ export default {
     posts: (state) => state.posts,
 
     addPostStatus: (state) => state.addPostStatus,
+
+    updatePostStatus: (state) => state.updatePostStatus,
 
     imgUploadUrl: (state) => state.imgUploadUrl,
 
@@ -30,6 +33,10 @@ export default {
   mutations: {
     setAddPostStatus (state, status) {
       state.addPostStatus = status
+    },
+
+    setUpdatePostStatus (state, status) {
+      state.updatePostStatus = status
     },
 
     setUploadImgUrl (state, imgData) {
@@ -170,6 +177,18 @@ export default {
             commit('setPost', post)
           })
       }
+    },
+
+    updatePost ({ commit, rootState }, post) {
+      const token = rootState.user.token
+
+      commit('common/setLoading', true, { root: true })
+
+      Vue.http.put(`posts/${post.id}.json?auth=${token}`, post)
+        .then(() => {
+          commit('setPost', post)
+          commit('common/setLoading', false, { root: true })
+        })
     },
 
     deletePost ({ commit, state, rootState }, id) {
