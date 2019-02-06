@@ -10,7 +10,7 @@
             class="card_flex ma-1"
           >
             <v-img
-              :src="post.img"
+              :src="post.img || post.poster"
               aspect-ratio="1.3"
             ></v-img>
 

@@ -27,7 +27,9 @@ export default {
 
     post: (state) => state.post,
 
-    countPostsUploaded: (state) => state.countPostsUploaded
+    countPostsUploaded: (state) => state.countPostsUploaded,
+
+    lastPosts: (state) => state.posts.slice(0, 4)
   },
 
   mutations: {

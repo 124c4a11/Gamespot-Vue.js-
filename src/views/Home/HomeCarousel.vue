@@ -1,25 +1,27 @@
 <template>
   <v-carousel
+    v-if="lastPosts"
     height="700"
     :cycle="false"
+    :interval="15000"
   >
     <v-carousel-item
-      v-for="(item, ndx) in slides"
-      :key="ndx"
-      :src="item.img"
+      v-for="post in lastPosts"
+      :key="post.id"
+      :src="post.poster || post.img"
     >
       <div class="slide-gradient">
         <v-container fill-height="true" py-5>
           <v-layout align-end>
             <div class="slide-content">
               <v-btn
-                to="#"
+                :to="`/post/${post.id}`"
                 tag="a"
                 depressed
                 color="red"
                 class="slide-more ma-0"
               >See review</v-btn>
-              <h2 class="slide-title">{{ item.title }}</h2>
+              <h2 class="slide-title">{{ post.title }}</h2>
             </div>
           </v-layout>
         </v-container>
@@ -29,33 +31,11 @@
 </template>
 
 <script>
-import img1 from '@/assets/img/featured/1.jpg'
-import img2 from '@/assets/img/featured/2.jpg'
-import img3 from '@/assets/img/featured/3.jpg'
-import img4 from '@/assets/img/featured/4.jpg'
+import { mapGetters } from 'vuex'
 
 export default {
-  data () {
-    return {
-      slides: [
-        {
-          title: 'Red dead redemption 2',
-          img: img1
-        },
-        {
-          title: 'Watchdogs 2',
-          img: img2
-        },
-        {
-          title: 'Rise of the tomb rider',
-          img: img3
-        },
-        {
-          title: 'Spider-man',
-          img: img4
-        }
-      ]
-    }
+  computed: {
+    ...mapGetters('posts', [ 'lastPosts' ])
   }
 }
 </script>
