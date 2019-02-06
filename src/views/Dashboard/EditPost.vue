@@ -220,8 +220,8 @@ export default {
     updatePost () {
       const newPost = { ...this.post }
 
-      newPost.img = this.imgUploadUrl
-      newPost.poster = this.posterUploadUrl
+      if (this.imgUploadUrl) newPost.img = this.imgUploadUrl
+      if (this.posterUploadUrl) newPost.poster = this.posterUploadUrl
 
       this.$store.dispatch('posts/updatePost', newPost)
     },
