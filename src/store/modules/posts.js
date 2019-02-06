@@ -190,6 +190,11 @@ export default {
         .then(() => {
           commit('setPost', post)
           commit('common/setLoading', false, { root: true })
+          commit('setUpdatePostStatus', true)
+
+          setTimeout(() => {
+            commit('setUpdatePostStatus', false)
+          }, 2000)
         })
     },
 
