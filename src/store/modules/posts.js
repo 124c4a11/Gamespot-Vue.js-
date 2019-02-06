@@ -49,6 +49,10 @@ export default {
       state.posterUploadUrl = imgData.secure_url
     },
 
+    setCountPostsUploaded (state, limit) {
+      state.countPostsUploaded = limit
+    },
+
     clearUploadImgUrl (state) {
       state.imgUploadUrl = ''
     },
@@ -111,7 +115,7 @@ export default {
         })
     },
 
-    getPosts ({ commit, state }, { limit }) {
+    getPosts ({ commit }, { limit }) {
       commit('common/setLoading', true, { root: true })
 
       Vue.http.get(`posts.json?orderBy="$key"&limitToLast=${limit}`)
@@ -126,9 +130,8 @@ export default {
             })
           }
 
-          state.countPostsUploaded = limit
-
           commit('setPosts', posts.reverse())
+          commit('setCountPostsUploaded', limit)
           commit('common/setLoading', false, { root: true })
         })
     },
