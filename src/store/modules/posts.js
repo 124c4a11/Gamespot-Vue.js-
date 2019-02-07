@@ -6,6 +6,7 @@ export default {
 
   state: {
     posts: [],
+    lastPosts: [],
     addPostStatus: false,
     updatePostStatus: false,
     imgUploadUrl: '',
@@ -29,7 +30,7 @@ export default {
 
     countPostsUploaded: (state) => state.countPostsUploaded,
 
-    lastPosts: (state) => state.posts.slice(0, 4)
+    lastPosts: (state) => state.lastPosts
   },
 
   mutations: {
@@ -65,6 +66,14 @@ export default {
       state.posts = posts
     },
 
+    setLastPosts (state) {
+      state.lastPosts = state.posts.slice(0, 4)
+    },
+
+    clearLastPosts (state) {
+      state.lastPosts = []
+    },
+
     setPost (state, post) {
       state.post = post
     },
@@ -83,6 +92,7 @@ export default {
         .then(() => {
           commit('common/setLoading', false, { root: true })
           commit('setAddPostStatus', true)
+          commit('clearLastPosts')
 
           setTimeout(() => {
             commit('setAddPostStatus', false)
@@ -131,6 +141,7 @@ export default {
           }
 
           commit('setPosts', posts.reverse())
+          commit('setLastPosts')
           commit('setCountPostsUploaded', limit)
           commit('common/setLoading', false, { root: true })
         })
