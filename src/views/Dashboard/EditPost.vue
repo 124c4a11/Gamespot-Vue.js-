@@ -1,7 +1,7 @@
 <template>
   <v-layout v-if="post" justify-center>
     <v-flex xs12 md10 lg8 xl6>
-      <h1 class="mt-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Edit Post' }}</h1>
+      <h1 class="my-4 text-xs-center grey--text text--darken-1">{{ post.title || 'Edit Post' }}</h1>
 
       <v-form ref="form" v-model="valid" validation>
         <!-- image upload -->
@@ -143,7 +143,7 @@
   </v-layout>
 
   <v-layout v-else justify-center align-center>
-    <h1 class="grey--text text--darken-1">Post not found!</h1>
+    <h1 class="grey--text text--darken-1">Sorry, post not found!</h1>
   </v-layout>
 </template>
 

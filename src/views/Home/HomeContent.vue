@@ -35,7 +35,7 @@
           </v-card>
         </v-layout>
 
-        <v-layout justify-center class="pt-4">
+        <v-layout v-if="posts.length" justify-center class="pt-4">
           <v-btn
             :disabled="loading"
             :loading="loading"

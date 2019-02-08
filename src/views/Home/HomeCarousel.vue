@@ -1,6 +1,6 @@
 <template>
   <v-carousel
-    v-if="lastPosts"
+    v-if="lastPosts.length"
     height="700"
     :cycle="false"
     :interval="15000"

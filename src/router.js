@@ -10,6 +10,7 @@ import AddPost from './views/Dashboard/AddPost'
 import EditPost from './views/Dashboard/EditPost'
 import ListPosts from './views/Dashboard/ListPosts'
 import Post from './views/Post'
+import NotFound from './views/404'
 
 Vue.use(Router)
 
@@ -64,6 +65,11 @@ export default new Router({
       path: '/post/:id',
       name: 'post',
       component: Post
+    },
+    {
+      path: '*',
+      name: '404',
+      component: NotFound
     }
   ]
 })
