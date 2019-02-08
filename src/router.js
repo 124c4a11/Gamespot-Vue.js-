@@ -71,5 +71,8 @@ export default new Router({
       name: '404',
       component: NotFound
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })
